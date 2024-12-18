@@ -28,6 +28,7 @@ export type Props = {
   playerState: PLAYER_STATES;
   progress: number;
   showOnStart?: boolean;
+  showOnLoad?: boolean;
   sliderStyle?: CustomSliderStyle;
   toolbarStyle?: ViewStyle;
 };
@@ -47,6 +48,7 @@ const MediaControls = (props: Props) => {
     playerState,
     progress,
     showOnStart = true,
+    showOnLoad = false,
     sliderStyle, // defaults are applied in Slider.tsx
     toolbarStyle: customToolbarStyle = {},
   } = props;
@@ -70,6 +72,13 @@ const MediaControls = (props: Props) => {
   useEffect(() => {
     fadeOutControls(fadeOutDelay);
   }, []);
+
+  useEffect(() => {
+    if (showOnLoad) {
+      if (isLoading && !isVisible) toggleControls();
+      if (!isLoading && isVisible) toggleControls();
+    }
+  }, [isLoading, showOnLoad]);
 
   const fadeOutControls = (delay = 0) => {
     Animated.timing(opacity, {

@@ -241,6 +241,8 @@ var MediaControls = function MediaControls(props) {
       progress = props.progress,
       _props$showOnStart = props.showOnStart,
       showOnStart = _props$showOnStart === void 0 ? true : _props$showOnStart,
+      _props$showOnLoad = props.showOnLoad,
+      showOnLoad = _props$showOnLoad === void 0 ? false : _props$showOnLoad,
       sliderStyle = props.sliderStyle,
       _props$toolbarStyle = props.toolbarStyle,
       customToolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
@@ -271,6 +273,12 @@ var MediaControls = function MediaControls(props) {
   useEffect(function () {
     fadeOutControls(fadeOutDelay);
   }, []);
+  useEffect(function () {
+    if (showOnLoad) {
+      if (isLoading && !isVisible) toggleControls();
+      if (!isLoading && isVisible) toggleControls();
+    }
+  }, [isLoading, showOnLoad]);
 
   var fadeOutControls = function fadeOutControls(delay) {
     if (delay === void 0) {
@@ -357,7 +365,7 @@ var MediaControls = function MediaControls(props) {
     accessible: false,
     onPress: toggleControls
   }, React.createElement(Animated.View, {
-    style: [styles.container, {
+    style: [styles.container, customContainerStyle, {
       opacity: opacity
     }]
   }, isVisible && React.createElement(View, {

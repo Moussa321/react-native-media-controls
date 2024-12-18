@@ -72,6 +72,8 @@ const App = () => {
 | onSeek       | function | No       |                        | Triggered when the user released the slider                          |
 | onSeeking    | function | Yes      |                        | Triggered when the user is interacting with the slider               |
 | showOnStart  | boolean  | Yes      | true                   | controls the visibility of the controls during the initial render    |
+| showOnLoad  | boolean  | Yes      | true                   | show the controler when video is loading    |
+
 
 ## Constants 
 ```js

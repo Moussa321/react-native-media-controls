@@ -18,8 +18,9 @@ export declare type Props = {
     playerState: PLAYER_STATES;
     progress: number;
     showOnStart?: boolean;
-    sliderStyle: CustomSliderStyle;
-    toolbarStyle: ViewStyle;
+    showOnLoad?: boolean;
+    sliderStyle?: CustomSliderStyle;
+    toolbarStyle?: ViewStyle;
 };
 declare const MediaControls: {
     (props: Props): JSX.Element;

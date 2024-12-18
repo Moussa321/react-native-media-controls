@@ -38,13 +38,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "tsdx lint --fix"
     }
   },
   "devDependencies": {
     "@types/react": "^16.9.34",
     "@types/react-native": "^0.62.5",
-    "husky": "^4.2.5",
+    "husky": "^4.3.8",
     "react": "^16.13.1",
     "react-native-slider": "^0.11.0",
     "rollup-plugin-copy-assets": "^2.0.3",
