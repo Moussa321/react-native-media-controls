@@ -78,7 +78,7 @@ const MediaControls = (props: Props) => {
       if (isLoading && !isVisible) toggleControls();
       if (!isLoading && isVisible) toggleControls();
     }
-  }, [isLoading, showOnLoad]);
+  }, [isLoading, showOnLoad, isVisible]);
 
   const fadeOutControls = (delay = 0) => {
     Animated.timing(opacity, {
