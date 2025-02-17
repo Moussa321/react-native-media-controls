@@ -76,6 +76,7 @@ const Slider = (props: Props) => {
           maximumValue={Math.floor(duration)}
           value={Math.floor(progress)}
           minimumTrackTintColor={mainColor}
+          maximumTrackTintColor={'#AEB3B7'}
         />
       </View>
       {Boolean(onFullScreen) && (

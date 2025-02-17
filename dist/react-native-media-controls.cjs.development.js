@@ -207,7 +207,8 @@ var Slider = function Slider(props) {
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
     value: Math.floor(progress),
-    minimumTrackTintColor: mainColor
+    minimumTrackTintColor: mainColor,
+    maximumTrackTintColor: '#AEB3B7'
   })), Boolean(onFullScreen) && React__default.createElement(reactNative.TouchableOpacity, {
     style: styles.fullScreenContainer,
     onPress: onFullScreen
