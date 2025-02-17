@@ -39,8 +39,6 @@ const Slider = (props: Props) => {
   } = props;
 
   const containerStyle = customSliderStyle?.containerStyle || {};
-  const customTrackStyle = customSliderStyle?.trackStyle || {};
-  const customThumbStyle = customSliderStyle?.thumbStyle || {};
 
   const dragging = (value: number) => {
     const { onSeeking, playerState } = props;
@@ -77,12 +75,6 @@ const Slider = (props: Props) => {
           onSlidingComplete={seekVideo}
           maximumValue={Math.floor(duration)}
           value={Math.floor(progress)}
-          trackStyle={[styles.track, customTrackStyle]}
-          thumbStyle={[
-            styles.thumb,
-            customThumbStyle,
-            { borderColor: mainColor },
-          ]}
           minimumTrackTintColor={mainColor}
         />
       </View>

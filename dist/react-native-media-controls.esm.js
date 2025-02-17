@@ -168,8 +168,6 @@ var Slider = function Slider(props) {
       onPause = props.onPause,
       progress = props.progress;
   var containerStyle = (customSliderStyle === null || customSliderStyle === void 0 ? void 0 : customSliderStyle.containerStyle) || {};
-  var customTrackStyle = (customSliderStyle === null || customSliderStyle === void 0 ? void 0 : customSliderStyle.trackStyle) || {};
-  var customThumbStyle = (customSliderStyle === null || customSliderStyle === void 0 ? void 0 : customSliderStyle.thumbStyle) || {};
 
   var dragging = function dragging(value) {
     var onSeeking = props.onSeeking,
@@ -204,10 +202,6 @@ var Slider = function Slider(props) {
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
     value: Math.floor(progress),
-    trackStyle: [styles.track, customTrackStyle],
-    thumbStyle: [styles.thumb, customThumbStyle, {
-      borderColor: mainColor
-    }],
     minimumTrackTintColor: mainColor
   })), Boolean(onFullScreen) && React.createElement(TouchableOpacity, {
     style: styles.fullScreenContainer,
