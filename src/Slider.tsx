@@ -1,10 +1,10 @@
 import React from "react";
 import { TouchableOpacity, View, Text, Image, ViewStyle } from "react-native";
-import RNSlider from "react-native-slider";
 import styles from "./MediaControls.style";
 import { humanizeVideoDuration } from "./utils";
 import { Props as MediaControlsProps } from "./MediaControls";
 import { PLAYER_STATES } from "./constants/playerStates";
+import RNSlider from "@react-native-community/slider";
 
 export type CustomSliderStyle = {
   containerStyle: ViewStyle;
