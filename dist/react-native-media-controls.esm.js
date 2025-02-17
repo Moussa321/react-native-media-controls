@@ -203,7 +203,7 @@ var Slider = function Slider(props) {
     maximumValue: Math.floor(duration),
     value: Math.floor(progress),
     minimumTrackTintColor: mainColor,
-    maximumTrackTintColor: '#AEB3B7'
+    maximumTrackTintColor: "#AEB3B7"
   })), Boolean(onFullScreen) && React.createElement(TouchableOpacity, {
     style: styles.fullScreenContainer,
     onPress: onFullScreen
