@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, Text, Image, ViewStyle } from "react-native";
+import { TouchableOpacity, View, Text, Image, ViewStyle, Platform } from "react-native";
 import styles from "./MediaControls.style";
 import { humanizeVideoDuration } from "./utils";
 import { Props as MediaControlsProps } from "./MediaControls";
@@ -70,10 +70,11 @@ const Slider = (props: Props) => {
           </Text>
         </View>
         <RNSlider
-          style={[styles.progressSlider]}
+          style={[styles.progressSlider, {marginTop: Platform.OS == 'ios' ? 4 : 10}]}
           onValueChange={dragging}
           onSlidingComplete={seekVideo}
           maximumValue={Math.floor(duration)}
+          thumbImage={Platform.OS == 'ios'?  require("./assets/thumb.png"): require("./assets/thumb_android.png")}
           value={Math.floor(progress)}
           minimumTrackTintColor={mainColor}
           maximumTrackTintColor={"#AEB3B7"}

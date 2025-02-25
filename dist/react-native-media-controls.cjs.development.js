@@ -202,10 +202,13 @@ var Slider = function Slider(props) {
   }, humanizeVideoDuration(progress)), React__default.createElement(reactNative.Text, {
     style: styles.timerLabel
   }, humanizeVideoDuration(duration))), React__default.createElement(RNSlider, {
-    style: [styles.progressSlider],
+    style: [styles.progressSlider, {
+      marginTop: reactNative.Platform.OS == 'ios' ? 4 : 10
+    }],
     onValueChange: dragging,
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
+    thumbImage: reactNative.Platform.OS == 'ios' ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
     value: Math.floor(progress),
     minimumTrackTintColor: mainColor,
     maximumTrackTintColor: "#AEB3B7"

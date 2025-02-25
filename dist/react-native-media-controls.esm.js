@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, TouchableOpacity, Image, View, Text, Animated, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ActivityIndicator, TouchableOpacity, Image, View, Text, Platform, Animated, TouchableWithoutFeedback } from 'react-native';
 import RNSlider from '@react-native-community/slider';
 
 var containerBackgroundColor = "rgba(45, 59, 62, 0.4)";
@@ -197,10 +197,13 @@ var Slider = function Slider(props) {
   }, humanizeVideoDuration(progress)), React.createElement(Text, {
     style: styles.timerLabel
   }, humanizeVideoDuration(duration))), React.createElement(RNSlider, {
-    style: [styles.progressSlider],
+    style: [styles.progressSlider, {
+      marginTop: Platform.OS == 'ios' ? 4 : 10
+    }],
     onValueChange: dragging,
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
+    thumbImage: Platform.OS == 'ios' ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
     value: Math.floor(progress),
     minimumTrackTintColor: mainColor,
     maximumTrackTintColor: "#AEB3B7"
