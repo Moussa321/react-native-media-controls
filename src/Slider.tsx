@@ -44,7 +44,7 @@ const Slider = (props: Props) => {
     onFullScreen,
     onPause,
     progress,
-    hideSeekbar
+    hideSeekbar,
   } = props;
 
   const containerStyle = customSliderStyle?.containerStyle || {};
@@ -70,31 +70,35 @@ const Slider = (props: Props) => {
       style={[styles.controlsRow, styles.progressContainer, containerStyle]}
     >
       <View style={styles.progressColumnContainer}>
-        {!hideSeekbar && <View style={[styles.timerLabelsContainer]}>
-          <Text style={styles.timerLabel}>
-            {humanizeVideoDuration(progress)}
-          </Text>
-          <Text style={styles.timerLabel}>
-            {humanizeVideoDuration(duration)}
-          </Text>
-        </View>}
-        {!hideSeekbar && <RNSlider
-          style={[
-            styles.progressSlider,
-            { marginTop: Platform.OS == "ios" ? 4 : 10 },
-          ]}
-          onValueChange={dragging}
-          onSlidingComplete={seekVideo}
-          maximumValue={Math.floor(duration)}
-          thumbImage={
-            Platform.OS == "ios"
-              ? require("./assets/thumb.png")
-              : require("./assets/thumb_android.png")
-          }
-          value={Math.floor(progress)}
-          minimumTrackTintColor={mainColor}
-          maximumTrackTintColor={"#AEB3B7"}
-        />}
+        {!hideSeekbar && (
+          <View style={[styles.timerLabelsContainer]}>
+            <Text style={styles.timerLabel}>
+              {humanizeVideoDuration(progress)}
+            </Text>
+            <Text style={styles.timerLabel}>
+              {humanizeVideoDuration(duration)}
+            </Text>
+          </View>
+        )}
+        {!hideSeekbar && (
+          <RNSlider
+            style={[
+              styles.progressSlider,
+              { marginTop: Platform.OS == "ios" ? 4 : 10 },
+            ]}
+            onValueChange={dragging}
+            onSlidingComplete={seekVideo}
+            maximumValue={Math.floor(duration)}
+            thumbImage={
+              Platform.OS == "ios"
+                ? require("./assets/thumb.png")
+                : require("./assets/thumb_android.png")
+            }
+            value={Math.floor(progress)}
+            minimumTrackTintColor={mainColor}
+            maximumTrackTintColor={"#AEB3B7"}
+          />
+        )}
       </View>
       {Boolean(onFullScreen) && (
         <TouchableOpacity

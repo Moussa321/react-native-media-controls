@@ -169,7 +169,7 @@ const MediaControls = (props: Props) => {
               isLoading={isLoading}
               mainColor={mainColor}
               playerState={playerState}
-            /> 
+            />
             <Slider
               progress={progress}
               duration={duration}
