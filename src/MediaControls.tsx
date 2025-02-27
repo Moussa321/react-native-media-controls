@@ -31,6 +31,7 @@ export type Props = {
   showOnLoad?: boolean;
   sliderStyle?: CustomSliderStyle;
   toolbarStyle?: ViewStyle;
+  hideSeekbar?: boolean;
 };
 
 const MediaControls = (props: Props) => {
@@ -50,6 +51,7 @@ const MediaControls = (props: Props) => {
     showOnStart = true,
     showOnLoad = false,
     sliderStyle, // defaults are applied in Slider.tsx
+    hideSeekbar = false,
     toolbarStyle: customToolbarStyle = {},
   } = props;
   const { initialOpacity, initialIsVisible } = (() => {
@@ -167,7 +169,7 @@ const MediaControls = (props: Props) => {
               isLoading={isLoading}
               mainColor={mainColor}
               playerState={playerState}
-            />
+            /> 
             <Slider
               progress={progress}
               duration={duration}
@@ -178,6 +180,7 @@ const MediaControls = (props: Props) => {
               onSeeking={onSeeking}
               onPause={onPause}
               customSliderStyle={sliderStyle}
+              hideSeekbar={hideSeekbar}
             />
           </View>
         )}

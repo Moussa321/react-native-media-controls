@@ -1,5 +1,12 @@
 import React from "react";
-import { TouchableOpacity, View, Text, Image, ViewStyle, Platform } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  ViewStyle,
+  Platform,
+} from "react-native";
 import styles from "./MediaControls.style";
 import { humanizeVideoDuration } from "./utils";
 import { Props as MediaControlsProps } from "./MediaControls";
@@ -24,6 +31,7 @@ type Props = Pick<
 > & {
   onPause: () => void;
   customSliderStyle?: CustomSliderStyle;
+  hideSeekbar?: boolean;
 };
 
 const fullScreenImage = require("./assets/ic_fullscreen.png");
@@ -36,6 +44,7 @@ const Slider = (props: Props) => {
     onFullScreen,
     onPause,
     progress,
+    hideSeekbar
   } = props;
 
   const containerStyle = customSliderStyle?.containerStyle || {};
@@ -61,24 +70,31 @@ const Slider = (props: Props) => {
       style={[styles.controlsRow, styles.progressContainer, containerStyle]}
     >
       <View style={styles.progressColumnContainer}>
-        <View style={[styles.timerLabelsContainer]}>
+        {!hideSeekbar && <View style={[styles.timerLabelsContainer]}>
           <Text style={styles.timerLabel}>
             {humanizeVideoDuration(progress)}
           </Text>
           <Text style={styles.timerLabel}>
             {humanizeVideoDuration(duration)}
           </Text>
-        </View>
-        <RNSlider
-          style={[styles.progressSlider, {marginTop: Platform.OS == 'ios' ? 4 : 10}]}
+        </View>}
+        {!hideSeekbar && <RNSlider
+          style={[
+            styles.progressSlider,
+            { marginTop: Platform.OS == "ios" ? 4 : 10 },
+          ]}
           onValueChange={dragging}
           onSlidingComplete={seekVideo}
           maximumValue={Math.floor(duration)}
-          thumbImage={Platform.OS == 'ios'?  require("./assets/thumb.png"): require("./assets/thumb_android.png")}
+          thumbImage={
+            Platform.OS == "ios"
+              ? require("./assets/thumb.png")
+              : require("./assets/thumb_android.png")
+          }
           value={Math.floor(progress)}
           minimumTrackTintColor={mainColor}
           maximumTrackTintColor={"#AEB3B7"}
-        />
+        />}
       </View>
       {Boolean(onFullScreen) && (
         <TouchableOpacity

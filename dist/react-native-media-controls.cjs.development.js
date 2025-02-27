@@ -171,7 +171,8 @@ var Slider = function Slider(props) {
       mainColor = props.mainColor,
       onFullScreen = props.onFullScreen,
       onPause = props.onPause,
-      progress = props.progress;
+      progress = props.progress,
+      hideSeekbar = props.hideSeekbar;
   var containerStyle = (customSliderStyle === null || customSliderStyle === void 0 ? void 0 : customSliderStyle.containerStyle) || {};
 
   var dragging = function dragging(value) {
@@ -195,20 +196,20 @@ var Slider = function Slider(props) {
     style: [styles.controlsRow, styles.progressContainer, containerStyle]
   }, React__default.createElement(reactNative.View, {
     style: styles.progressColumnContainer
-  }, React__default.createElement(reactNative.View, {
+  }, !hideSeekbar && React__default.createElement(reactNative.View, {
     style: [styles.timerLabelsContainer]
   }, React__default.createElement(reactNative.Text, {
     style: styles.timerLabel
   }, humanizeVideoDuration(progress)), React__default.createElement(reactNative.Text, {
     style: styles.timerLabel
-  }, humanizeVideoDuration(duration))), React__default.createElement(RNSlider, {
+  }, humanizeVideoDuration(duration))), !hideSeekbar && React__default.createElement(RNSlider, {
     style: [styles.progressSlider, {
-      marginTop: reactNative.Platform.OS == 'ios' ? 4 : 10
+      marginTop: reactNative.Platform.OS == "ios" ? 4 : 10
     }],
     onValueChange: dragging,
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
-    thumbImage: reactNative.Platform.OS == 'ios' ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
+    thumbImage: reactNative.Platform.OS == "ios" ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
     value: Math.floor(progress),
     minimumTrackTintColor: mainColor,
     maximumTrackTintColor: "#AEB3B7"
@@ -247,6 +248,8 @@ var MediaControls = function MediaControls(props) {
       _props$showOnLoad = props.showOnLoad,
       showOnLoad = _props$showOnLoad === void 0 ? false : _props$showOnLoad,
       sliderStyle = props.sliderStyle,
+      _props$hideSeekbar = props.hideSeekbar,
+      hideSeekbar = _props$hideSeekbar === void 0 ? false : _props$hideSeekbar,
       _props$toolbarStyle = props.toolbarStyle,
       customToolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
 
@@ -390,7 +393,8 @@ var MediaControls = function MediaControls(props) {
     onSeek: onSeek,
     onSeeking: onSeeking,
     onPause: onPause,
-    customSliderStyle: sliderStyle
+    customSliderStyle: sliderStyle,
+    hideSeekbar: hideSeekbar
   }))));
 };
 

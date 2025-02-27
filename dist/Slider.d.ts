@@ -9,6 +9,7 @@ export declare type CustomSliderStyle = {
 declare type Props = Pick<MediaControlsProps, "progress" | "duration" | "mainColor" | "onFullScreen" | "playerState" | "onSeek" | "onSeeking"> & {
     onPause: () => void;
     customSliderStyle?: CustomSliderStyle;
+    hideSeekbar?: boolean;
 };
 declare const Slider: (props: Props) => JSX.Element;
 export { Slider };
