@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 import { ViewStyle } from "react-native";
 import { Props as MediaControlsProps } from "./MediaControls";
 export declare type CustomSliderStyle = {
@@ -11,5 +11,5 @@ declare type Props = Pick<MediaControlsProps, "progress" | "duration" | "mainCol
     customSliderStyle?: CustomSliderStyle;
     hideSeekbar?: boolean;
 };
-declare const Slider: (props: Props) => JSX.Element;
+declare const Slider: (props: Props) => React.JSX.Element;
 export { Slider };

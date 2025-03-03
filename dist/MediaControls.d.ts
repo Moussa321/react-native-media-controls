@@ -24,9 +24,9 @@ export declare type Props = {
     hideSeekbar?: boolean;
 };
 declare const MediaControls: {
-    (props: Props): JSX.Element;
+    (props: Props): React.JSX.Element;
     Toolbar: ({ children }: {
         children: React.ReactNode;
-    }) => JSX.Element;
+    }) => React.JSX.Element;
 };
 export default MediaControls;

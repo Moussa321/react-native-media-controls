@@ -54,6 +54,7 @@ const MediaControls = (props: Props) => {
     hideSeekbar = false,
     toolbarStyle: customToolbarStyle = {},
   } = props;
+
   const { initialOpacity, initialIsVisible } = (() => {
     if (showOnStart) {
       return {

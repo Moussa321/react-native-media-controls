@@ -30,11 +30,11 @@
     "dev": "tsdx watch --localDev",
     "build": "tsdx build",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build && husky install"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "react-native": ">=0.60"
+    "react": ">=19.0.0",
+    "react-native": ">=0.73.0"
   },
   "husky": {
     "hooks": {
@@ -42,14 +42,14 @@
     }
   },
   "devDependencies": {
-    "@types/react": "^16.9.34",
-    "@types/react-native": "^0.62.5",
-    "husky": "^4.3.8",
-    "react": "^16.13.1",
+    "@types/react": "^18.0.27",
+    "@types/react-native": "^0.73.0",
+    "husky": "^8.0.0",
+    "react": "^18.2.0",
     "@react-native-community/slider": "^4.5.5",
     "rollup-plugin-copy-assets": "^2.0.3",
-    "tsdx": "^0.13.2",
-    "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "tsdx": "^0.14.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2"
   }
 }

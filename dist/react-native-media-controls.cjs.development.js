@@ -113,9 +113,8 @@ var styles = /*#__PURE__*/reactNative.StyleSheet.create({
 
 var humanizeVideoDuration = function humanizeVideoDuration(seconds) {
   var _ref = seconds >= 3600 ? [11, 8] : [14, 5],
-      begin = _ref[0],
-      end = _ref[1];
-
+    begin = _ref[0],
+    end = _ref[1];
   var date = new Date(0);
   date.setSeconds(seconds);
   return date.toISOString().substr(begin, end);
@@ -124,13 +123,10 @@ var getPlayerStateIcon = function getPlayerStateIcon(playerState) {
   switch (playerState) {
     case exports.PLAYER_STATES.PAUSED:
       return require("./assets/ic_play.png");
-
     case exports.PLAYER_STATES.PLAYING:
       return require("./assets/ic_pause.png");
-
     case exports.PLAYER_STATES.ENDED:
       return require("./assets/ic_replay.png");
-
     default:
       return null;
   }
@@ -138,10 +134,10 @@ var getPlayerStateIcon = function getPlayerStateIcon(playerState) {
 
 var Controls = function Controls(props) {
   var isLoading = props.isLoading,
-      mainColor = props.mainColor,
-      playerState = props.playerState,
-      onReplay = props.onReplay,
-      onPause = props.onPause;
+    mainColor = props.mainColor,
+    playerState = props.playerState,
+    onReplay = props.onReplay,
+    onPause = props.onPause;
   var icon = getPlayerStateIcon(playerState);
   var pressAction = playerState === exports.PLAYER_STATES.ENDED ? onReplay : onPause;
   var content = isLoading ? React__default.createElement(reactNative.ActivityIndicator, {
@@ -164,34 +160,28 @@ var Controls = function Controls(props) {
 };
 
 var fullScreenImage = /*#__PURE__*/require("./assets/ic_fullscreen.png");
-
 var Slider = function Slider(props) {
   var customSliderStyle = props.customSliderStyle,
-      duration = props.duration,
-      mainColor = props.mainColor,
-      onFullScreen = props.onFullScreen,
-      onPause = props.onPause,
-      progress = props.progress,
-      hideSeekbar = props.hideSeekbar;
-  var containerStyle = (customSliderStyle === null || customSliderStyle === void 0 ? void 0 : customSliderStyle.containerStyle) || {};
-
+    duration = props.duration,
+    mainColor = props.mainColor,
+    onFullScreen = props.onFullScreen,
+    onPause = props.onPause,
+    progress = props.progress,
+    hideSeekbar = props.hideSeekbar;
+  var containerStyle = (customSliderStyle == null ? void 0 : customSliderStyle.containerStyle) || {};
   var dragging = function dragging(value) {
     var onSeeking = props.onSeeking,
-        playerState = props.playerState;
+      playerState = props.playerState;
     onSeeking(value);
-
     if (playerState === exports.PLAYER_STATES.PAUSED) {
       return;
     }
-
     onPause();
   };
-
   var seekVideo = function seekVideo(value) {
     props.onSeek(value);
     onPause();
   };
-
   return React__default.createElement(reactNative.View, {
     style: [styles.controlsRow, styles.progressContainer, containerStyle]
   }, React__default.createElement(reactNative.View, {
@@ -228,54 +218,49 @@ var Toolbar = function Toolbar(_ref) {
 
 var MediaControls = function MediaControls(props) {
   var children = props.children,
-      _props$containerStyle = props.containerStyle,
-      customContainerStyle = _props$containerStyle === void 0 ? {} : _props$containerStyle,
-      duration = props.duration,
-      _props$fadeOutDelay = props.fadeOutDelay,
-      fadeOutDelay = _props$fadeOutDelay === void 0 ? 5000 : _props$fadeOutDelay,
-      _props$isLoading = props.isLoading,
-      isLoading = _props$isLoading === void 0 ? false : _props$isLoading,
-      _props$mainColor = props.mainColor,
-      mainColor = _props$mainColor === void 0 ? "rgba(12, 83, 175, 0.9)" : _props$mainColor,
-      onFullScreen = props.onFullScreen,
-      onReplayCallback = props.onReplay,
-      onSeek = props.onSeek,
-      onSeeking = props.onSeeking,
-      playerState = props.playerState,
-      progress = props.progress,
-      _props$showOnStart = props.showOnStart,
-      showOnStart = _props$showOnStart === void 0 ? true : _props$showOnStart,
-      _props$showOnLoad = props.showOnLoad,
-      showOnLoad = _props$showOnLoad === void 0 ? false : _props$showOnLoad,
-      sliderStyle = props.sliderStyle,
-      _props$hideSeekbar = props.hideSeekbar,
-      hideSeekbar = _props$hideSeekbar === void 0 ? false : _props$hideSeekbar,
-      _props$toolbarStyle = props.toolbarStyle,
-      customToolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
-
+    _props$containerStyle = props.containerStyle,
+    customContainerStyle = _props$containerStyle === void 0 ? {} : _props$containerStyle,
+    duration = props.duration,
+    _props$fadeOutDelay = props.fadeOutDelay,
+    fadeOutDelay = _props$fadeOutDelay === void 0 ? 5000 : _props$fadeOutDelay,
+    _props$isLoading = props.isLoading,
+    isLoading = _props$isLoading === void 0 ? false : _props$isLoading,
+    _props$mainColor = props.mainColor,
+    mainColor = _props$mainColor === void 0 ? "rgba(12, 83, 175, 0.9)" : _props$mainColor,
+    onFullScreen = props.onFullScreen,
+    onReplayCallback = props.onReplay,
+    onSeek = props.onSeek,
+    onSeeking = props.onSeeking,
+    playerState = props.playerState,
+    progress = props.progress,
+    _props$showOnStart = props.showOnStart,
+    showOnStart = _props$showOnStart === void 0 ? true : _props$showOnStart,
+    _props$showOnLoad = props.showOnLoad,
+    showOnLoad = _props$showOnLoad === void 0 ? false : _props$showOnLoad,
+    sliderStyle = props.sliderStyle,
+    _props$hideSeekbar = props.hideSeekbar,
+    hideSeekbar = _props$hideSeekbar === void 0 ? false : _props$hideSeekbar,
+    _props$toolbarStyle = props.toolbarStyle,
+    customToolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
   var _ref = function () {
-    if (showOnStart) {
+      if (showOnStart) {
+        return {
+          initialOpacity: 1,
+          initialIsVisible: true
+        };
+      }
       return {
-        initialOpacity: 1,
-        initialIsVisible: true
+        initialOpacity: 0,
+        initialIsVisible: false
       };
-    }
-
-    return {
-      initialOpacity: 0,
-      initialIsVisible: false
-    };
-  }(),
-      initialOpacity = _ref.initialOpacity,
-      initialIsVisible = _ref.initialIsVisible;
-
+    }(),
+    initialOpacity = _ref.initialOpacity,
+    initialIsVisible = _ref.initialIsVisible;
   var _useState = React.useState(new reactNative.Animated.Value(initialOpacity)),
-      opacity = _useState[0];
-
+    opacity = _useState[0];
   var _useState2 = React.useState(initialIsVisible),
-      isVisible = _useState2[0],
-      setIsVisible = _useState2[1];
-
+    isVisible = _useState2[0],
+    setIsVisible = _useState2[1];
   React.useEffect(function () {
     fadeOutControls(fadeOutDelay);
   }, []);
@@ -285,12 +270,10 @@ var MediaControls = function MediaControls(props) {
       if (!isLoading && isVisible) toggleControls();
     }
   }, [isLoading, showOnLoad, isVisible]);
-
   var fadeOutControls = function fadeOutControls(delay) {
     if (delay === void 0) {
       delay = 0;
     }
-
     reactNative.Animated.timing(opacity, {
       toValue: 0,
       duration: 300,
@@ -304,12 +287,10 @@ var MediaControls = function MediaControls(props) {
       }
     });
   };
-
   var fadeInControls = function fadeInControls(loop) {
     if (loop === void 0) {
       loop = true;
     }
-
     setIsVisible(true);
     reactNative.Animated.timing(opacity, {
       toValue: 1,
@@ -322,42 +303,35 @@ var MediaControls = function MediaControls(props) {
       }
     });
   };
-
   var onReplay = function onReplay() {
     fadeOutControls(fadeOutDelay);
     onReplayCallback();
   };
-
   var cancelAnimation = function cancelAnimation() {
     return opacity.stopAnimation(function () {
       return setIsVisible(true);
     });
   };
-
   var onPause = function onPause() {
     var playerState = props.playerState,
-        onPaused = props.onPaused;
+      onPaused = props.onPaused;
     var PLAYING = exports.PLAYER_STATES.PLAYING,
-        PAUSED = exports.PLAYER_STATES.PAUSED;
-
+      PAUSED = exports.PLAYER_STATES.PAUSED;
     switch (playerState) {
       case PLAYING:
         {
           cancelAnimation();
           break;
         }
-
       case PAUSED:
         {
           fadeOutControls(fadeOutDelay);
           break;
         }
     }
-
     var newPlayerState = playerState === PLAYING ? PAUSED : PLAYING;
     return onPaused(newPlayerState);
   };
-
   var toggleControls = function toggleControls() {
     // value is the last value of the animation when stop animation was called.
     // As this is an opacity effect, I (Charlie) used the value (0 or 1) as a boolean
@@ -366,7 +340,6 @@ var MediaControls = function MediaControls(props) {
       return value ? fadeOutControls() : fadeInControls();
     });
   };
-
   return React__default.createElement(reactNative.TouchableWithoutFeedback, {
     accessible: false,
     onPress: toggleControls
@@ -397,7 +370,6 @@ var MediaControls = function MediaControls(props) {
     hideSeekbar: hideSeekbar
   }))));
 };
-
 MediaControls.Toolbar = Toolbar;
 
 exports.default = MediaControls;
