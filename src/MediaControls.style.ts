@@ -7,7 +7,6 @@ const white = "#fff";
 export default StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: containerBackgroundColor,
     bottom: 0,
     flexDirection: "column",
     justifyContent: "space-between",
@@ -93,5 +92,15 @@ export default StyleSheet.create({
   track: {
     borderRadius: 1,
     height: 5,
+  },
+  // **Added Styles**
+  controlsOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "space-between",
+    backgroundColor: containerBackgroundColor,
+    padding: 10,
+  },
+  touchableArea: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

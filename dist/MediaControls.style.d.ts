@@ -1,7 +1,6 @@
 declare const _default: {
     container: {
         alignItems: "center";
-        backgroundColor: string;
         bottom: number;
         flexDirection: "column";
         justifyContent: "space-between";
@@ -87,6 +86,23 @@ declare const _default: {
     track: {
         borderRadius: number;
         height: number;
+    };
+    controlsOverlay: {
+        justifyContent: "space-between";
+        backgroundColor: string;
+        padding: number;
+        position: "absolute";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    };
+    touchableArea: {
+        position: "absolute";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
     };
 };
 export default _default;

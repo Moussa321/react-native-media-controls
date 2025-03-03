@@ -29,7 +29,7 @@
     "start": "tsdx watch",
     "dev": "tsdx watch --localDev",
     "build": "tsdx build",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint --fix",
     "prepare": "tsdx build && husky install",
     "test": "echo \"No tests specified\" && exit 0"
   },

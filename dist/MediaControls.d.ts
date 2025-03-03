@@ -2,6 +2,7 @@ import React from "react";
 import { GestureResponderEvent, ViewStyle } from "react-native";
 import { PLAYER_STATES } from "./constants/playerStates";
 import { CustomSliderStyle } from "./Slider";
+import { Toolbar } from "./Toolbar";
 export declare type Props = {
     children: React.ReactNode;
     containerStyle?: ViewStyle;
@@ -23,10 +24,8 @@ export declare type Props = {
     toolbarStyle?: ViewStyle;
     hideSeekbar?: boolean;
 };
-declare const MediaControls: {
-    (props: Props): React.JSX.Element;
-    Toolbar: ({ children }: {
-        children: React.ReactNode;
-    }) => React.JSX.Element;
-};
+interface MediaControlsComponent extends React.FC<Props> {
+    Toolbar: typeof Toolbar;
+}
+declare const MediaControls: MediaControlsComponent;
 export default MediaControls;
