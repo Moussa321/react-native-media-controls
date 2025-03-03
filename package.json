@@ -30,7 +30,8 @@
     "dev": "tsdx watch --localDev",
     "build": "tsdx build",
     "lint": "tsdx lint",
-    "prepare": "tsdx build && husky install"
+    "prepare": "tsdx build && husky install",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
