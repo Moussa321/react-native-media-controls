@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Animated,
   TouchableWithoutFeedback,
   GestureResponderEvent,
   ViewStyle,
+  ViewProps, // ✅ Import ViewProps
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  runOnJS,
+  AnimatedProps
+} from "react-native-reanimated";
 import styles from "./MediaControls.style";
 import { PLAYER_STATES } from "./constants/playerStates";
 import { Controls } from "./Controls";
@@ -14,7 +22,7 @@ import { Toolbar } from "./Toolbar";
 
 export type Props = {
   children: React.ReactNode;
-  containerStyle: ViewStyle;
+  containerStyle?: ViewStyle;
   duration: number;
   fadeOutDelay?: number;
   isFullScreen: boolean;
@@ -37,7 +45,7 @@ export type Props = {
 const MediaControls = (props: Props) => {
   const {
     children,
-    containerStyle: customContainerStyle = {},
+    containerStyle = {},
     duration,
     fadeOutDelay = 5000,
     isLoading = false,
@@ -50,9 +58,9 @@ const MediaControls = (props: Props) => {
     progress,
     showOnStart = true,
     showOnLoad = false,
-    sliderStyle, // defaults are applied in Slider.tsx
+    sliderStyle,
     hideSeekbar = false,
-    toolbarStyle: customToolbarStyle = {},
+    toolbarStyle = {},
   } = props;
 
   const { initialOpacity, initialIsVisible } = (() => {
@@ -69,7 +77,7 @@ const MediaControls = (props: Props) => {
     };
   })();
 
-  const [opacity] = useState(new Animated.Value(initialOpacity));
+  const opacity = useSharedValue(initialOpacity);
   const [isVisible, setIsVisible] = useState(initialIsVisible);
 
   useEffect(() => {
@@ -84,32 +92,35 @@ const MediaControls = (props: Props) => {
   }, [isLoading, showOnLoad, isVisible]);
 
   const fadeOutControls = (delay = 0) => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 300,
+    opacity.value = withDelay(
       delay,
-      useNativeDriver: false,
-    }).start(result => {
-      /* I noticed that the callback is called twice, when it is invoked and when it completely finished
-      This prevents some flickering */
-      if (result.finished) {
-        setIsVisible(false);
-      }
-    });
+      withTiming(
+        0,
+        {
+          duration: 300,
+        },
+        (isFinished: boolean) => {
+          if (isFinished) {
+            runOnJS(setIsVisible)(false);
+          }
+        }
+      )
+    );
   };
 
   const fadeInControls = (loop = true) => {
-    setIsVisible(true);
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 300,
-      delay: 0,
-      useNativeDriver: false,
-    }).start(() => {
-      if (loop) {
-        fadeOutControls(fadeOutDelay);
+    runOnJS(setIsVisible)(true);
+    opacity.value = withTiming(
+      1,
+      {
+        duration: 300,
+      },
+      () => {
+        if (loop) {
+          fadeOutControls(fadeOutDelay);
+        }
       }
-    });
+    );
   };
 
   const onReplay = () => {
@@ -117,7 +128,10 @@ const MediaControls = (props: Props) => {
     onReplayCallback();
   };
 
-  const cancelAnimation = () => opacity.stopAnimation(() => setIsVisible(true));
+  const cancelAnimation = () => {
+    opacity.value = withTiming(1, { duration: 0 });
+    setIsVisible(true);
+  };
 
   const onPause = () => {
     const { playerState, onPaused } = props;
@@ -140,26 +154,29 @@ const MediaControls = (props: Props) => {
   };
 
   const toggleControls = () => {
-    // value is the last value of the animation when stop animation was called.
-    // As this is an opacity effect, I (Charlie) used the value (0 or 1) as a boolean
-    opacity.stopAnimation((value: number) => {
-      setIsVisible(!!value);
-      return value ? fadeOutControls() : fadeInControls();
-    });
+    const currentOpacity = opacity.value;
+    if (currentOpacity > 0.5) {
+      fadeOutControls();
+    } else {
+      fadeInControls();
+    }
   };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
 
   return (
     <TouchableWithoutFeedback accessible={false} onPress={toggleControls}>
-      <Animated.View
-        style={[styles.container, customContainerStyle, { opacity }]}
-      >
+     {/* @ts-ignore: Suppressing TS2322 error */}
+      <Animated.View style={[styles.container, containerStyle, animatedStyle] as AnimatedProps<ViewProps>["style"]}>
         {isVisible && (
-          <View style={[styles.container, customContainerStyle]}>
+          <View style={[styles.container, containerStyle]}>
             <View
               style={[
                 styles.controlsRow,
                 styles.toolbarRow,
-                customToolbarStyle,
+                toolbarStyle,
               ]}
             >
               {children}

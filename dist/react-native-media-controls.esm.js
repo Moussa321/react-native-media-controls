@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, TouchableOpacity, Image, View, Text, Platform, Animated, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ActivityIndicator, TouchableOpacity, Image, View, Text, Platform, TouchableWithoutFeedback } from 'react-native';
+import Animated, { useSharedValue, withDelay, withTiming, runOnJS, useAnimatedStyle } from 'react-native-reanimated';
 import RNSlider from '@react-native-community/slider';
 
 var containerBackgroundColor = "rgba(45, 59, 62, 0.4)";
@@ -213,7 +214,7 @@ var Toolbar = function Toolbar(_ref) {
 var MediaControls = function MediaControls(props) {
   var children = props.children,
     _props$containerStyle = props.containerStyle,
-    customContainerStyle = _props$containerStyle === void 0 ? {} : _props$containerStyle,
+    containerStyle = _props$containerStyle === void 0 ? {} : _props$containerStyle,
     duration = props.duration,
     _props$fadeOutDelay = props.fadeOutDelay,
     fadeOutDelay = _props$fadeOutDelay === void 0 ? 5000 : _props$fadeOutDelay,
@@ -235,7 +236,7 @@ var MediaControls = function MediaControls(props) {
     _props$hideSeekbar = props.hideSeekbar,
     hideSeekbar = _props$hideSeekbar === void 0 ? false : _props$hideSeekbar,
     _props$toolbarStyle = props.toolbarStyle,
-    customToolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
+    toolbarStyle = _props$toolbarStyle === void 0 ? {} : _props$toolbarStyle;
   var _ref = function () {
       if (showOnStart) {
         return {
@@ -250,11 +251,10 @@ var MediaControls = function MediaControls(props) {
     }(),
     initialOpacity = _ref.initialOpacity,
     initialIsVisible = _ref.initialIsVisible;
-  var _useState = useState(new Animated.Value(initialOpacity)),
-    opacity = _useState[0];
-  var _useState2 = useState(initialIsVisible),
-    isVisible = _useState2[0],
-    setIsVisible = _useState2[1];
+  var opacity = useSharedValue(initialOpacity);
+  var _useState = useState(initialIsVisible),
+    isVisible = _useState[0],
+    setIsVisible = _useState[1];
   useEffect(function () {
     fadeOutControls(fadeOutDelay);
   }, []);
@@ -268,30 +268,22 @@ var MediaControls = function MediaControls(props) {
     if (delay === void 0) {
       delay = 0;
     }
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 300,
-      delay: delay,
-      useNativeDriver: false
-    }).start(function (result) {
-      /* I noticed that the callback is called twice, when it is invoked and when it completely finished
-      This prevents some flickering */
-      if (result.finished) {
-        setIsVisible(false);
+    opacity.value = withDelay(delay, withTiming(0, {
+      duration: 300
+    }, function (isFinished) {
+      if (isFinished) {
+        runOnJS(setIsVisible)(false);
       }
-    });
+    }));
   };
   var fadeInControls = function fadeInControls(loop) {
     if (loop === void 0) {
       loop = true;
     }
-    setIsVisible(true);
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 300,
-      delay: 0,
-      useNativeDriver: false
-    }).start(function () {
+    runOnJS(setIsVisible)(true);
+    opacity.value = withTiming(1, {
+      duration: 300
+    }, function () {
       if (loop) {
         fadeOutControls(fadeOutDelay);
       }
@@ -302,9 +294,10 @@ var MediaControls = function MediaControls(props) {
     onReplayCallback();
   };
   var cancelAnimation = function cancelAnimation() {
-    return opacity.stopAnimation(function () {
-      return setIsVisible(true);
+    opacity.value = withTiming(1, {
+      duration: 0
     });
+    setIsVisible(true);
   };
   var onPause = function onPause() {
     var playerState = props.playerState,
@@ -327,24 +320,27 @@ var MediaControls = function MediaControls(props) {
     return onPaused(newPlayerState);
   };
   var toggleControls = function toggleControls() {
-    // value is the last value of the animation when stop animation was called.
-    // As this is an opacity effect, I (Charlie) used the value (0 or 1) as a boolean
-    opacity.stopAnimation(function (value) {
-      setIsVisible(!!value);
-      return value ? fadeOutControls() : fadeInControls();
-    });
+    var currentOpacity = opacity.value;
+    if (currentOpacity > 0.5) {
+      fadeOutControls();
+    } else {
+      fadeInControls();
+    }
   };
+  var animatedStyle = useAnimatedStyle(function () {
+    return {
+      opacity: opacity.value
+    };
+  });
   return React.createElement(TouchableWithoutFeedback, {
     accessible: false,
     onPress: toggleControls
   }, React.createElement(Animated.View, {
-    style: [styles.container, customContainerStyle, {
-      opacity: opacity
-    }]
+    style: [styles.container, containerStyle, animatedStyle]
   }, isVisible && React.createElement(View, {
-    style: [styles.container, customContainerStyle]
+    style: [styles.container, containerStyle]
   }, React.createElement(View, {
-    style: [styles.controlsRow, styles.toolbarRow, customToolbarStyle]
+    style: [styles.controlsRow, styles.toolbarRow, toolbarStyle]
   }, children), React.createElement(Controls, {
     onPause: onPause,
     onReplay: onReplay,
