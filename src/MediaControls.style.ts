@@ -9,7 +9,6 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: containerBackgroundColor,
     bottom: 0,
-    flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
     left: 0,

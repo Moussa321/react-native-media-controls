@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   View,
-  TouchableWithoutFeedback,
   GestureResponderEvent,
   ViewStyle,
-  ViewProps, // ✅ Import ViewProps
+  ViewProps,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -12,7 +12,7 @@ import Animated, {
   withTiming,
   withDelay,
   runOnJS,
-  AnimatedProps
+  AnimatedProps,
 } from "react-native-reanimated";
 import styles from "./MediaControls.style";
 import { PLAYER_STATES } from "./constants/playerStates";
@@ -39,8 +39,7 @@ export type Props = {
   showOnLoad?: boolean;
   sliderStyle?: CustomSliderStyle;
   toolbarStyle?: ViewStyle;
-  hideSeekbar?: boolean;
-};
+  hideSeekbar?: boolean;};
 
 const MediaControls = (props: Props) => {
   const {
@@ -63,53 +62,35 @@ const MediaControls = (props: Props) => {
     toolbarStyle = {},
   } = props;
 
-  const { initialOpacity, initialIsVisible } = (() => {
+  const { initialOpacity } = (() => {
     if (showOnStart) {
       return {
         initialOpacity: 1,
-        initialIsVisible: true,
       };
     }
 
     return {
       initialOpacity: 0,
-      initialIsVisible: false,
     };
   })();
 
   const opacity = useSharedValue(initialOpacity);
-  const [isVisible, setIsVisible] = useState(initialIsVisible);
 
-  useEffect(() => {
-    fadeOutControls(fadeOutDelay);
-  }, []);
-
-  useEffect(() => {
-    if (showOnLoad) {
-      if (isLoading && !isVisible) toggleControls();
-      if (!isLoading && isVisible) toggleControls();
-    }
-  }, [isLoading, showOnLoad, isVisible]);
-
-  const fadeOutControls = (delay = 0) => {
+  // Define fadeOutControls with useCallback
+  const fadeOutControls = useCallback((delay = 0) => {
     opacity.value = withDelay(
       delay,
       withTiming(
         0,
         {
           duration: 300,
-        },
-        (isFinished: boolean) => {
-          if (isFinished) {
-            runOnJS(setIsVisible)(false);
-          }
         }
       )
     );
-  };
+  }, [opacity]);
 
-  const fadeInControls = (loop = true) => {
-    runOnJS(setIsVisible)(true);
+  // Define fadeInControls with useCallback
+  const fadeInControls = useCallback((loop = true) => {
     opacity.value = withTiming(
       1,
       {
@@ -117,11 +98,23 @@ const MediaControls = (props: Props) => {
       },
       () => {
         if (loop) {
-          fadeOutControls(fadeOutDelay);
+          runOnJS(fadeOutControls)(fadeOutDelay); // Use runOnJS here
         }
       }
     );
-  };
+  }, [opacity, fadeOutControls, fadeOutDelay]);
+
+  useEffect(() => {
+    fadeOutControls(fadeOutDelay);
+  }, [fadeOutControls, fadeOutDelay]);
+
+  useEffect(() => {
+    if (showOnLoad) {
+      console.log('badddddd',isLoading, showOnLoad)
+      if (isLoading) toggleControls();
+      if (!isLoading) toggleControls();
+    }
+  }, [isLoading, showOnLoad]);
 
   const onReplay = () => {
     fadeOutControls(fadeOutDelay);
@@ -130,10 +123,9 @@ const MediaControls = (props: Props) => {
 
   const cancelAnimation = () => {
     opacity.value = withTiming(1, { duration: 0 });
-    setIsVisible(true);
   };
 
-  const onPause = () => {
+  const onPause = useCallback(() => {
     const { playerState, onPaused } = props;
     const { PLAYING, PAUSED, ENDED } = PLAYER_STATES;
     switch (playerState) {
@@ -151,26 +143,26 @@ const MediaControls = (props: Props) => {
 
     const newPlayerState = playerState === PLAYING ? PAUSED : PLAYING;
     return onPaused(newPlayerState);
-  };
+  }, [props, fadeOutControls, fadeOutDelay]);
 
-  const toggleControls = () => {
+  const toggleControls = useCallback(() => {
+    console.log('pressed')
     const currentOpacity = opacity.value;
-    if (currentOpacity > 0.5) {
+    if (currentOpacity === 1) {
       fadeOutControls();
     } else {
       fadeInControls();
     }
-  };
+  }, [opacity, fadeOutControls, fadeInControls]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
 
   return (
-    <TouchableWithoutFeedback accessible={false} onPress={toggleControls}>
-     {/* @ts-ignore: Suppressing TS2322 error */}
-      <Animated.View style={[styles.container, containerStyle, animatedStyle] as AnimatedProps<ViewProps>["style"]}>
-        {isVisible && (
+    <TouchableWithoutFeedback onPress={toggleControls}>
+      {/* @ts-ignore: Suppressing TS2322 error */}
+      <Animated.View style={[styles.container,containerStyle,animatedStyle] as AnimatedProps<ViewProps>["style"]}>
           <View style={[styles.container, containerStyle]}>
             <View
               style={[
@@ -201,7 +193,6 @@ const MediaControls = (props: Props) => {
               hideSeekbar={hideSeekbar}
             />
           </View>
-        )}
       </Animated.View>
     </TouchableWithoutFeedback>
   );

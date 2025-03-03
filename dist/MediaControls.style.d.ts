@@ -3,7 +3,6 @@ declare const _default: {
         alignItems: "center";
         backgroundColor: string;
         bottom: number;
-        flex: number;
         flexDirection: "column";
         justifyContent: "space-between";
         left: number;

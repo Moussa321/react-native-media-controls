@@ -19,7 +19,6 @@ var styles = /*#__PURE__*/reactNative.StyleSheet.create({
     alignItems: "center",
     backgroundColor: containerBackgroundColor,
     bottom: 0,
-    flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
     left: 0,
@@ -247,55 +246,50 @@ var MediaControls = function MediaControls(props) {
   var _ref = function () {
       if (showOnStart) {
         return {
-          initialOpacity: 1,
-          initialIsVisible: true
+          initialOpacity: 1
         };
       }
       return {
-        initialOpacity: 0,
-        initialIsVisible: false
+        initialOpacity: 0
       };
     }(),
-    initialOpacity = _ref.initialOpacity,
-    initialIsVisible = _ref.initialIsVisible;
+    initialOpacity = _ref.initialOpacity;
   var opacity = Animated.useSharedValue(initialOpacity);
-  var _useState = React.useState(initialIsVisible),
-    isVisible = _useState[0],
-    setIsVisible = _useState[1];
-  React.useEffect(function () {
-    fadeOutControls(fadeOutDelay);
-  }, []);
-  React.useEffect(function () {
-    if (showOnLoad) {
-      if (isLoading && !isVisible) toggleControls();
-      if (!isLoading && isVisible) toggleControls();
-    }
-  }, [isLoading, showOnLoad, isVisible]);
-  var fadeOutControls = function fadeOutControls(delay) {
+  // Define fadeOutControls with useCallback
+  var fadeOutControls = React.useCallback(function (delay) {
     if (delay === void 0) {
       delay = 0;
     }
     opacity.value = Animated.withDelay(delay, Animated.withTiming(0, {
       duration: 300
-    }, function (isFinished) {
-      if (isFinished) {
-        Animated.runOnJS(setIsVisible)(false);
-      }
     }));
-  };
-  var fadeInControls = function fadeInControls(loop) {
+  }, [opacity]);
+  // Define fadeInControls with useCallback
+  var fadeInControls = React.useCallback(function (loop) {
     if (loop === void 0) {
       loop = true;
     }
-    Animated.runOnJS(setIsVisible)(true);
     opacity.value = Animated.withTiming(1, {
       duration: 300
     }, function () {
       if (loop) {
-        fadeOutControls(fadeOutDelay);
+        Animated.runOnJS(fadeOutControls)(fadeOutDelay); // Use runOnJS here
       }
     });
-  };
+  }, [opacity, fadeOutControls, fadeOutDelay]);
+  React.useEffect(function () {
+    fadeOutControls(fadeOutDelay);
+  }, [fadeOutControls, fadeOutDelay]);
+  React.useEffect(function () {
+    if (showOnLoad) {
+      console.log('badddddd', isLoading, showOnLoad);
+      if (isLoading) toggleControls();
+      if (!isLoading) toggleControls();
+    }
+  }, [isLoading, showOnLoad]);
+  React.useEffect(function () {
+    console.log('opacity', opacity.value);
+  }, [opacity.value]);
   var onReplay = function onReplay() {
     fadeOutControls(fadeOutDelay);
     onReplayCallback();
@@ -304,9 +298,8 @@ var MediaControls = function MediaControls(props) {
     opacity.value = Animated.withTiming(1, {
       duration: 0
     });
-    setIsVisible(true);
   };
-  var onPause = function onPause() {
+  var onPause = React.useCallback(function () {
     var playerState = props.playerState,
       onPaused = props.onPaused;
     var PLAYING = exports.PLAYER_STATES.PLAYING,
@@ -325,26 +318,30 @@ var MediaControls = function MediaControls(props) {
     }
     var newPlayerState = playerState === PLAYING ? PAUSED : PLAYING;
     return onPaused(newPlayerState);
-  };
-  var toggleControls = function toggleControls() {
+  }, [props, fadeOutControls, fadeOutDelay]);
+  var toggleControls = React.useCallback(function () {
+    console.log('pressed');
     var currentOpacity = opacity.value;
-    if (currentOpacity > 0.5) {
+    if (currentOpacity === 1) {
       fadeOutControls();
     } else {
       fadeInControls();
     }
-  };
+  }, [opacity, fadeOutControls, fadeInControls]);
   var animatedStyle = Animated.useAnimatedStyle(function () {
     return {
       opacity: opacity.value
     };
   });
   return React__default.createElement(reactNative.TouchableWithoutFeedback, {
-    accessible: false,
+    style: {
+      backgroundColor: 'red',
+      height: '100%'
+    },
     onPress: toggleControls
   }, React__default.createElement(Animated__default.View, {
     style: [styles.container, containerStyle, animatedStyle]
-  }, isVisible && React__default.createElement(reactNative.View, {
+  }, React__default.createElement(reactNative.View, {
     style: [styles.container, containerStyle]
   }, React__default.createElement(reactNative.View, {
     style: [styles.controlsRow, styles.toolbarRow, toolbarStyle]
