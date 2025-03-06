@@ -10,7 +10,6 @@ import {
 import styles from "./MediaControls.style";
 import { humanizeVideoDuration } from "./utils";
 import { Props as MediaControlsProps } from "./MediaControls";
-import { PLAYER_STATES } from "./constants/playerStates";
 import RNSlider from "@react-native-community/slider";
 
 export type CustomSliderStyle = {
@@ -49,16 +48,6 @@ const Slider = (props: Props) => {
 
   const containerStyle = customSliderStyle?.containerStyle || {};
 
-  const dragging = (value: number) => {
-    const { onSeeking, playerState } = props;
-    onSeeking(value);
-
-    if (playerState === PLAYER_STATES.PAUSED) {
-      return;
-    }
-
-    onPause();
-  };
 
   const seekVideo = (value: number) => {
     props.onSeek(value);
@@ -86,7 +75,6 @@ const Slider = (props: Props) => {
               styles.progressSlider,
               { marginTop: Platform.OS == "ios" ? 4 : 10 },
             ]}
-            onValueChange={dragging}
             onSlidingComplete={seekVideo}
             maximumValue={Math.floor(duration)}
             thumbImage={

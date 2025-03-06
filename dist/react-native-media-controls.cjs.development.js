@@ -186,15 +186,14 @@ var Slider = function Slider(props) {
     progress = props.progress,
     hideSeekbar = props.hideSeekbar;
   var containerStyle = (customSliderStyle == null ? void 0 : customSliderStyle.containerStyle) || {};
-  var dragging = function dragging(value) {
-    var onSeeking = props.onSeeking,
-      playerState = props.playerState;
-    onSeeking(value);
-    if (playerState === exports.PLAYER_STATES.PAUSED) {
-      return;
-    }
-    onPause();
-  };
+  // const dragging = (value: number) => {
+  //   const { onSeeking, playerState } = props;
+  //   onSeeking(value);
+  //   if (playerState === PLAYER_STATES.PAUSED) {
+  //     return;
+  //   }
+  //   onPause();
+  // };
   var seekVideo = function seekVideo(value) {
     props.onSeek(value);
     onPause();
@@ -213,7 +212,7 @@ var Slider = function Slider(props) {
     style: [styles.progressSlider, {
       marginTop: reactNative.Platform.OS == "ios" ? 4 : 10
     }],
-    onValueChange: dragging,
+    // onValueChange={dragging}
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
     thumbImage: reactNative.Platform.OS == "ios" ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
