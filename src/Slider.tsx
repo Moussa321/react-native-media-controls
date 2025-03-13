@@ -34,6 +34,7 @@ type Props = Pick<
 };
 
 const fullScreenImage = require("./assets/ic_fullscreen.png");
+const thumb = require("./assets/ic_thumb.png");
 
 const Slider = (props: Props) => {
   const {
@@ -73,15 +74,11 @@ const Slider = (props: Props) => {
           <RNSlider
             style={[
               styles.progressSlider,
-              { marginTop: Platform.OS == "ios" ? 4 : 10 },
+              { marginTop: Platform.OS == "ios" ? 4 : 12, marginBottom: Platform.OS == "ios" ? 0 : 6 },
             ]}
             onSlidingComplete={seekVideo}
             maximumValue={Math.floor(duration)}
-            thumbImage={
-              Platform.OS == "ios"
-                ? require("./assets/thumb.png")
-                : require("./assets/thumb_android.png")
-            }
+            thumbImage={thumb}
             value={Math.floor(progress)}
             minimumTrackTintColor={mainColor}
             maximumTrackTintColor={"#AEB3B7"}

@@ -177,6 +177,7 @@ var Controls = function Controls(props) {
 };
 
 var fullScreenImage = /*#__PURE__*/require("./assets/ic_fullscreen.png");
+var thumb = /*#__PURE__*/require("./assets/ic_thumb.png");
 var Slider = function Slider(props) {
   var customSliderStyle = props.customSliderStyle,
     duration = props.duration,
@@ -186,14 +187,6 @@ var Slider = function Slider(props) {
     progress = props.progress,
     hideSeekbar = props.hideSeekbar;
   var containerStyle = (customSliderStyle == null ? void 0 : customSliderStyle.containerStyle) || {};
-  // const dragging = (value: number) => {
-  //   const { onSeeking, playerState } = props;
-  //   onSeeking(value);
-  //   if (playerState === PLAYER_STATES.PAUSED) {
-  //     return;
-  //   }
-  //   onPause();
-  // };
   var seekVideo = function seekVideo(value) {
     props.onSeek(value);
     onPause();
@@ -210,12 +203,12 @@ var Slider = function Slider(props) {
     style: styles.timerLabel
   }, humanizeVideoDuration(duration))), !hideSeekbar && React__default.createElement(RNSlider, {
     style: [styles.progressSlider, {
-      marginTop: reactNative.Platform.OS == "ios" ? 4 : 10
+      marginTop: reactNative.Platform.OS == "ios" ? 4 : 12,
+      marginBottom: reactNative.Platform.OS == "ios" ? 0 : 6
     }],
-    // onValueChange={dragging}
     onSlidingComplete: seekVideo,
     maximumValue: Math.floor(duration),
-    thumbImage: reactNative.Platform.OS == "ios" ? require("./assets/thumb.png") : require("./assets/thumb_android.png"),
+    thumbImage: thumb,
     value: Math.floor(progress),
     minimumTrackTintColor: mainColor,
     maximumTrackTintColor: "#AEB3B7"
